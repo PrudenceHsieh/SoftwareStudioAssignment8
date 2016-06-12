@@ -42,7 +42,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * Init Variable for Page 2
      **/
     TextView textResult;
-
     Button return_button;
 
     /**
@@ -79,13 +78,43 @@ public class MainActivity extends Activity implements View.OnClickListener {
             public void onClick(View view) {
                 /** Func() for setup page 1 **/
                 ipAdd = inputIP.getText().toString();
-                System.out.println(ipAdd);
+
+                Log.d("Client", "Client Send");
+                Thread t = new thread();
+                t.start();
+
+
                 jumpToMainLayout();
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+    class thread extends Thread {
+        public void run() {
+            try {
+                System.out.println("Client: Waiting to connect...");
+                int serverPort = 2000;
+
+                // Create socket connect server
+                socket = new Socket(ipAdd, serverPort);
+                System.out.println("Connected!");
+
+                // Create stream communicate with server
+                out = socket.getOutputStream();
+                //String strToSend = new String(num1 + " " + oper + " " + num2 + " = " + result);//"Hi I'm client";
+
+                //byte[] sendStrByte = new byte[1024];
+                //System.arraycopy(strToSend.getBytes(), 0, sendStrByte, 0, strToSend.length());
+                //out.write(sendStrByte);
+
+
+
+            } catch (Exception e) {
+                System.out.println("Error" + e.getMessage());
+            }
+        }
     }
 
     /**
@@ -127,14 +156,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        Log.d("Client", "Client Send");
-        Thread t = new thread();
-        System.out.println("thread start");
-        t.start();
 
-        //float num1 = 0; // Store input num 1
-        //float num2 = 0; // Store input num 2
-        //float result = 0; // Store result after calculating
+
+        //float
+        num1 = 0; // Store input num 1
+        //float
+        num2 = 0; // Store input num 2
+        //float
+        result = 0; // Store result after calculating
 
         // check if the fields are empty
         if (TextUtils.isEmpty(inputNumTxt1.getText().toString())
@@ -183,10 +212,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         
         //TODO: Pass the result String to jumpToResultLayout() and show the result at Result view
         System.out.println("jump to result layout");
-        jumpToResultLayout(new String(num1 + " " + oper + " " + num2 + " = " + result));
+        jumpToResultLayout(ans);
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
 
@@ -225,33 +254,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
-    }
-
-    class thread extends Thread {
-        public void run() {
-            try {
-                System.out.println("Client: Waiting to connect...");
-                int serverPort = 4000;
-
-                // Create socket connect server
-                socket = new Socket(ipAdd, serverPort);
-                System.out.println("Connected!");
-
-                // Create stream communicate with server
-                out = socket.getOutputStream();
-                //String strToSend = new String(num1 + " " + oper + " " + num2 + " = " + result);//"Hi I'm client";
-
-                //byte[] sendStrByte = new byte[1024];
-                //System.arraycopy(strToSend.getBytes(), 0, sendStrByte, 0, strToSend.length());
-                //out.write(sendStrByte);
+    }*/
 
 
-
-            } catch (Exception e) {
-                System.out.println("Error" + e.getMessage());
-            }
-        }
-    }
 
     public void jumpToResultLayout(String resultStr) {
         setContentView(R.layout.result_page);

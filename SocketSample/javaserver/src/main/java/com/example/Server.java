@@ -12,9 +12,9 @@ import javax.swing.JLabel;
 /**
  * Created by Gary on 16/5/28.
  */
-public class Server implements Runnable{
+public class Server extends JFrame implements Runnable{
     private Thread thread;
-    private ServerSocket servSock;
+    private ServerSocket serverSocket;
     private JFrame frame = new JFrame();
     private JLabel label = new JLabel();
 
@@ -32,7 +32,7 @@ public class Server implements Runnable{
             System.out.println("Waitting to connect......");
 
             // Create server socket
-            servSock = new ServerSocket(2000);
+            serverSocket = new ServerSocket(2000);
 
             // Create socket thread
             thread = new Thread(this);
@@ -51,7 +51,7 @@ public class Server implements Runnable{
         while(true){
             try{
                 // After client connected, create client socket connect with client
-                Socket clntSock = servSock.accept();
+                Socket clntSock = serverSocket.accept();
                 InputStream in = clntSock.getInputStream();
 
                 System.out.println("Connected!!");
@@ -60,9 +60,14 @@ public class Server implements Runnable{
                 byte[] b = new byte[1024];
                 int length;
 
-                length = in.read(b);
-                String s = new String(b);
-                System.out.println("[Server Said]" + s);
+
+                while(true){//
+                    int len = in.read(b);
+                    String outStr = new String(b);
+                    System.out.println("[Server Said]" + outStr);
+                    label.setText(outStr);
+                }
+
 
             }
             catch(Exception e){
