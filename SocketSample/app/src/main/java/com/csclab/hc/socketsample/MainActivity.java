@@ -24,11 +24,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
      **/
     EditText inputIP;
     Button ipSend;
-    String ipAdd = "127.0.0.1";
+    String ipAdd = "";
 
     /**
      * Init Variable for Page 1
      **/
+    
     EditText inputNumTxt1;
     EditText inputNumTxt2;
 
@@ -48,6 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * Init Variable
      **/
     String oper = "";
+    String ans = "";
     float num1 = 0; // Store input num 1
     float num2 = 0; // Store input num 2
     float result = 0; // Store result after calculating
@@ -56,6 +58,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * Init Variable for Page 1
      **/
     Button btn;
+    Socket socket;
+    OutputStream out;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -167,6 +171,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         // HINT:Using log.d to check your answer is correct before implement page turning
         Log.d("debug", "ANS " + result);
+        ans = num1 + " " + oper + " " + num2 + " = " + result;
+        String strToSend = ans;
+        byte[] sendStrByte = new byte[1024];
+        System.arraycopy(strToSend.getBytes(), 0, sendStrByte, 0, strToSend.length());
+        try{
+            out.write(sendStrByte);
+        }catch (Exception e){
+            System.out.println("FAIL to send to server");
+        }
+        
         //TODO: Pass the result String to jumpToResultLayout() and show the result at Result view
         System.out.println("jump to result layout");
         jumpToResultLayout(new String(num1 + " " + oper + " " + num2 + " = " + result));
@@ -220,16 +234,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 int serverPort = 4000;
 
                 // Create socket connect server
-                Socket socket = new Socket(ipAdd, serverPort);
+                socket = new Socket(ipAdd, serverPort);
                 System.out.println("Connected!");
 
                 // Create stream communicate with server
-                OutputStream out = socket.getOutputStream();
-                String strToSend = new String(num1 + " " + oper + " " + num2 + " = " + result);//"Hi I'm client";
+                out = socket.getOutputStream();
+                //String strToSend = new String(num1 + " " + oper + " " + num2 + " = " + result);//"Hi I'm client";
 
-                byte[] sendStrByte = new byte[1024];
-                System.arraycopy(strToSend.getBytes(), 0, sendStrByte, 0, strToSend.length());
-                out.write(sendStrByte);
+                //byte[] sendStrByte = new byte[1024];
+                //System.arraycopy(strToSend.getBytes(), 0, sendStrByte, 0, strToSend.length());
+                //out.write(sendStrByte);
 
 
 

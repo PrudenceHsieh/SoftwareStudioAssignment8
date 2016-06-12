@@ -5,15 +5,25 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+
 /**
  * Created by Gary on 16/5/28.
  */
 public class Server implements Runnable{
     private Thread thread;
     private ServerSocket servSock;
+    private JFrame frame = new JFrame();
+    private JLabel label = new JLabel();
 
     public Server(){
-
+        
+        frame.setSize(250, 150);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(label);
+        frame.setVisible(true);
 
         try {
             // Detect server ip
